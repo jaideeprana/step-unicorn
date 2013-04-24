@@ -5,7 +5,9 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mockito;
+import org.xml.sax.SAXException;
 
+import javax.xml.parsers.ParserConfigurationException;
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -46,7 +48,7 @@ public class ResponseTest {
     }
 
     @Test
-    public void shouldReadFromFile() throws IOException {
+    public void shouldReadFromFile() throws IOException, ParserConfigurationException, SAXException {
         Response response = new Response();
         response.sendResponse(input, output, client);
         when(mockReportGenerator.getPath(client)).thenReturn("static/index.html");
@@ -55,7 +57,7 @@ public class ResponseTest {
     }
 
     @Test
-    public void shouldGenerateReportForTheGivenRequest() throws IOException {
+    public void shouldGenerateReportForTheGivenRequest() throws IOException, ParserConfigurationException, SAXException {
         Response response = new Response();
         when(mockReportGenerator.getPath(client)).thenReturn("static/index.html");
         response.sendResponse(input, output, client);
@@ -64,7 +66,7 @@ public class ResponseTest {
     }
 
     @Test
-    public void shouldAddHeaderInTheResponse() throws IOException {
+    public void shouldAddHeaderInTheResponse() throws IOException, ParserConfigurationException, SAXException {
         Response response = new Response();
         when(mockReportGenerator.contentType(anyInt(), anyString())).thenReturn("Content-Type: text/html");
         response.sendResponse(input, output, client);
@@ -73,7 +75,7 @@ public class ResponseTest {
     }
 
     @Test
-    public void shouldAddStatusOfRequestToHeader() throws IOException {
+    public void shouldAddStatusOfRequestToHeader() throws IOException, ParserConfigurationException, SAXException {
         Response response = new Response();
         when(mockReportGenerator.statusCode(anyInt())).thenReturn("200 OK");
         response.sendResponse(input, output, client);

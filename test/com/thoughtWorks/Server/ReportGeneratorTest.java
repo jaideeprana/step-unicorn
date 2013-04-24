@@ -4,6 +4,10 @@ import org.hamcrest.core.IsEqual;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mockito;
+import org.xml.sax.SAXException;
+
+import javax.xml.parsers.ParserConfigurationException;
+import java.io.IOException;
 
 import static org.junit.Assert.assertThat;
 import static org.mockito.Mockito.when;
@@ -16,19 +20,19 @@ public class ReportGeneratorTest {
         client = Mockito.mock(Client.class);
     }
     @Test
-    public void shouldReturnPathOfFileForTheGIvenRequest(){
+    public void shouldReturnPathOfFileForTheGIvenRequest() throws IOException, SAXException, ParserConfigurationException {
         when(client.getClient()).thenReturn("GET /src/spike/index.html HTTP/1.1");
         assertThat(reportGenerator.getPath(client), IsEqual.equalTo("src/spike/index.html"));
     }
 
     @Test
-    public void shouldReturnPathOfJpgFileForTheGIvenRequest(){
+    public void shouldReturnPathOfJpgFileForTheGIvenRequest() throws IOException, SAXException, ParserConfigurationException {
         when(client.getClient()).thenReturn("GET /src/spike/a.jpg HTTP/1.1");
         assertThat(reportGenerator.getPath(client), IsEqual.equalTo("src/spike/a.jpg"));
     }
 
     @Test
-    public void shoudGivePathEvenIfFileDoesntHaveExtension(){
+    public void shoudGivePathEvenIfFileDoesntHaveExtension() throws IOException, SAXException, ParserConfigurationException {
         when(client.getClient()).thenReturn("GET /src/spike/a HTTP/1.1");
         assertThat(reportGenerator.getPath(client), IsEqual.equalTo("src/spike/a"));
     }
