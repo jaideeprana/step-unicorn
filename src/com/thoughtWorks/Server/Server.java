@@ -20,9 +20,9 @@ public class Server extends Thread{
         while (true) {
             try {
                 Socket connectedSocket=createSocket();
+                Client client= getClient(connectedSocket);
                 BufferedReader input = new BufferedReader(new InputStreamReader(connectedSocket.getInputStream()));
                 DataOutputStream output = new DataOutputStream(connectedSocket.getOutputStream());
-                Client client= getClient(connectedSocket);
                 response.sendResponse(input,output,client);
                 sleep(500);
             }

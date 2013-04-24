@@ -33,36 +33,42 @@ public class ReportGenerator {
 
     public String getPath(Client client) throws ParserConfigurationException, IOException, SAXException {
         String path=null;
-        String str = client.getClient() + "/";
-        String prefix = "GET /src/com/static/";
+        String content = getContent(client);
+        NodeList server = readConfigFile();
 
-            str = str.substring(0, prefix.length()+5);
-            String parts[] = str.split("/");
+        if(client.getClient().contains("static")){
+            for (int temp = 0; temp < server.getLength(); temp++) {
+                Node nNode = server.item(temp);
+                if (nNode.getNodeType() == Node.ELEMENT_NODE) {
+                    Element eElement = (Element) nNode;
+                    path = eElement.getElementsByTagName("root").item(0).getTextContent()+content;
+                }
+            }
+        }
 
+        else{
+            System.out.println("dynamic");
+        }
+
+       return path;
+    }
+
+    private String getContent(Client client) {
+        String clientUrl = client.getClient() +"/";
+        String staticUrl = "GET /src/com/static/";
+        clientUrl = clientUrl.substring(0, staticUrl.length()+10);
+        String clientUrlParts[] = clientUrl.split("/");
+        String contentParts[]=clientUrlParts[4].split(" ");
+        return contentParts[0];
+    }
+
+    private NodeList readConfigFile() throws ParserConfigurationException, SAXException, IOException {
         File fXmlFile = new File("/home/bipilesh/project/step-unicorn/src/com/thoughtWorks/static/serverConfig.xml");
         DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
         DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
         Document doc = dBuilder.parse(fXmlFile);
         doc.getDocumentElement().normalize();
-        NodeList server = doc.getElementsByTagName("server");
-
-        if(client.getClient().contains("static")){
-
-            for (int temp = 0; temp < server.getLength(); temp++) {
-                Node nNode = server.item(temp);
-                if (nNode.getNodeType() == Node.ELEMENT_NODE) {
-                    Element eElement = (Element) nNode;
-                    path = eElement.getElementsByTagName("root").item(0).getTextContent()+parts[4];
-                }
-            }
-        }
-
-        else
-        {
-            System.out.println("dynamic");
-        }
-
-       return path;
+        return doc.getElementsByTagName("server");
     }
 
     public String statusCode(int return_code) {
