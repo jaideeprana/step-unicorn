@@ -3,12 +3,12 @@ package com.thoughtWorks.Server;
 
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
+import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.ServerSocket;
 import java.net.Socket;
 
 public class Server extends Thread{
-   ServerSocket serverSocket;
     private int port;
 
     public Server(int port) {
@@ -16,22 +16,25 @@ public class Server extends Thread{
     }
 
     public void run() {
-        ServerSocket serversocket = null;
-        Client client;
         Response response=new Response();
         while (true) {
             try {
-                serversocket = new ServerSocket(port);
-                Socket connectionsocket = serversocket.accept();
-                client=new Client((new BufferedReader(new InputStreamReader(connectionsocket.getInputStream()))).readLine());
-                BufferedReader input = new BufferedReader(new InputStreamReader(connectionsocket.getInputStream()));
-                DataOutputStream output = new DataOutputStream(connectionsocket.getOutputStream());
-                response.sendResponse(input,output,client);
+                Socket connectedSocket=createSocket();
+                BufferedReader input = new BufferedReader(new InputStreamReader(connectedSocket.getInputStream()));
+                DataOutputStream output = new DataOutputStream(connectedSocket.getOutputStream());
+                response.sendResponse(input,output,getClient(connectedSocket));
+                sleep(500);
             }
             catch (Exception e) {
             }
-
         }
     }
+    public Socket createSocket() throws IOException {
+        ServerSocket serverSocket = new ServerSocket(port);
+        return serverSocket.accept();
+    }
 
+    public Client getClient(Socket connectedSocket) throws IOException {
+        return new Client((new BufferedReader(new InputStreamReader(connectedSocket.getInputStream()))).readLine());
+    }
 }
