@@ -1,16 +1,6 @@
 package com.thoughtWorks.Server;
 
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
-import org.xml.sax.SAXException;
-
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
 import java.io.DataOutputStream;
-import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 
@@ -31,37 +21,22 @@ public class ReportGenerator {
         requestedfile.close();
     }
 
-    public String getPath(Client client) throws ParserConfigurationException, IOException, SAXException {
+    public String getPath(Client client){
         String path=null;
-        String str = client.getClient() + "/";
-        String prefix = "GET /src/com/static/";
 
-            str = str.substring(0, prefix.length()+5);
-            String parts[] = str.split("/");
-
-        File fXmlFile = new File("/home/bipilesh/project/step-unicorn/src/com/thoughtWorks/static/serverConfig.xml");
-        DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
-        DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
-        Document doc = dBuilder.parse(fXmlFile);
-        doc.getDocumentElement().normalize();
-        NodeList server = doc.getElementsByTagName("server");
-
-        if(client.getClient().contains("static")){
-
-            for (int temp = 0; temp < server.getLength(); temp++) {
-                Node nNode = server.item(temp);
-                if (nNode.getNodeType() == Node.ELEMENT_NODE) {
-                    Element eElement = (Element) nNode;
-                    path = eElement.getElementsByTagName("root").item(0).getTextContent()+parts[4];
+            String tmp2 = new String(client.getClient());
+            int start = 0;
+            int end = 0;
+            for (int a = 0; a < tmp2.length(); a++) {
+                if (tmp2.charAt(a) == ' ' && start != 0) {
+                    end = a;
+                    break;
+                }
+                if (tmp2.charAt(a) == ' ' && start == 0) {
+                    start = a;
                 }
             }
-        }
-
-        else
-        {
-            System.out.println("dynamic");
-        }
-
+            path = tmp2.substring(start + 2, end);
        return path;
     }
 
