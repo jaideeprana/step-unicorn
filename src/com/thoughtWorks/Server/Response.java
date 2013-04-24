@@ -1,5 +1,7 @@
 package com.thoughtWorks.Server;
 
+import org.xml.sax.SAXException;
+import javax.xml.parsers.ParserConfigurationException;
 import java.io.*;
 
 public class Response {
@@ -7,13 +9,13 @@ public class Response {
     private DataOutputStream dataOutputStream;
     private DataInputStream dataInputStream;
     private ReportGenerator reportGenerator=new ReportGenerator();
-    private String path;
-    public void sendResponse(BufferedReader input, DataOutputStream output,Client client) throws IOException {
+
+    public void sendResponse(BufferedReader input, DataOutputStream output,Client client) throws IOException, ParserConfigurationException, SAXException {
         write(input,output,client);
     }
 
-    private void write(BufferedReader input, DataOutputStream output,Client client) throws IOException {
-        path = reportGenerator.getPath(client);
+    private void write(BufferedReader input, DataOutputStream output,Client client) throws IOException, ParserConfigurationException, SAXException {
+        String path = reportGenerator.getPath(client);
         try {
             output.writeBytes(requestHeader(200, 5));
             reportGenerator.generate(path, output);
@@ -25,8 +27,8 @@ public class Response {
     }
 
     private String requestHeader(int return_code, int file_type) {
-        String s = reportGenerator.statusCode(return_code);
-        s = reportGenerator.contentType(5, s);
-        return s;
+        String status = reportGenerator.statusCode(return_code);
+        status = reportGenerator.contentType(5, status);
+        return status;
     }
 }

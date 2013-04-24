@@ -10,11 +10,10 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import java.io.File;
 
 public class Demoing {
-
     public static void main(String argv[]) {
 
         try {
-            File fXmlFile = new File("src/spike/demo.xml");
+            File fXmlFile = new File("src/spike/serverConfig.xml");
             DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
             DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
             Document doc = dBuilder.parse(fXmlFile);
