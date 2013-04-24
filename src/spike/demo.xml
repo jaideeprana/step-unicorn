@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<server-config>
+    <http>
+        <server>
+            <listen>80</listen>
+            <root>/home/praky/forum/static</root>
+            <static-file-pattern>*.js, *.jpeg, *.gif, *.jpg, *.css</static-file-pattern>
+        </server>
+        <dynamic-proxy-pass>
+            <url-pattern>/forum</url-pattern>
+            <upstream-url>http://qaserver.com:8080</upstream-url>
+        </dynamic-proxy-pass>
+    </http>
+</server-config>
