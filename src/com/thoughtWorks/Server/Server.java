@@ -11,6 +11,7 @@ import java.net.Socket;
 public class Server extends Thread{
     private int port;
     private Socket connectedSocket;
+    ServerSocket serverSocket;
 
     public Server(int port) {
         this.port = port;
@@ -18,6 +19,10 @@ public class Server extends Thread{
 
     public void run() {
         Response response=new Response();
+        try {
+            serverSocket= new ServerSocket(port);
+        } catch (IOException e) {
+        }
         while (true) {
             try {
                 connectedSocket = createSocket();
@@ -33,7 +38,6 @@ public class Server extends Thread{
         }
     }
     public Socket createSocket() throws IOException {
-        ServerSocket serverSocket = new ServerSocket(port);
         return serverSocket.accept();
     }
 
