@@ -23,7 +23,6 @@ public class Response {
         catch (Exception e) {
             output.writeBytes(requestHeader(404, 5));
         }
-        output.close();
     }
 
     private String requestHeader(int return_code, int file_type) {
