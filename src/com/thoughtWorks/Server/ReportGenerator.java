@@ -12,7 +12,6 @@ import javax.xml.parsers.ParserConfigurationException;
 import java.io.*;
 import java.net.InetAddress;
 import java.net.Socket;
-import java.net.UnknownHostException;
 
 public class ReportGenerator {
 
@@ -102,20 +101,11 @@ public class ReportGenerator {
             case 200:
                 status = status + "200 OK";
                 break;
-            case 400:
-                status = status + "400 Bad Request";
-                break;
-            case 403:
-                status = status + "403 Forbidden";
-                break;
             case 404:
                 status = status + "404 Not Found";
                 break;
             case 500:
                 status = status + "500 Internal Server Error";
-                break;
-            case 501:
-                status = status + "501 Not Implemented";
                 break;
         }
         return status;
@@ -132,10 +122,10 @@ public class ReportGenerator {
                 contentType = contentType + "Content-Type: image/gif\r\n";
                 break;
             case 3:
-                contentType = contentType + "Content-Type: application/x-zip-compressed\r\n";
+                contentType = contentType + "Content-Type: application/compressed\r\n";
                 break;
             case 4:
-                contentType = contentType + "Content-Type: image/x-icon\r\n";
+                contentType = contentType + "Content-Type: image/icon\r\n";
                 break;
             default:
                 contentType = contentType + "Content-Type: text/html\r\n";
@@ -144,5 +134,27 @@ public class ReportGenerator {
 
         contentType = contentType + "\r\n";
         return contentType;
+    }
+
+
+    public int getFileType(String path){
+        int type_is = 0;
+        if (path.endsWith(".jpg") || path.endsWith(".jpeg")) {
+            type_is = 1;
+        }
+        if (path.endsWith(".gif")) {
+            type_is = 2;
+        }
+        if (path.endsWith(".zip") ) {
+            type_is = 3;
+        }
+        if (path.endsWith(".ico")) {
+            type_is = 4;
+        }
+        if (path.endsWith(".html") || path.endsWith(".txt")) {
+            type_is = 5;
+        }
+
+        return type_is;
     }
 }

@@ -17,12 +17,12 @@ public class Response {
     private void write( DataOutputStream output,Client client,Server server) throws IOException, ParserConfigurationException, SAXException {
         String path = reportGenerator.getPath(client,server);
         try {
-            output.writeBytes(requestHeader(200, 5));
+            output.writeBytes(requestHeader(200, reportGenerator.getFileType(path)));
             reportGenerator.generate(path, output);
             output.close();
         }
         catch (Exception e) {
-            output.writeBytes(requestHeader(404, 5));
+            output.writeBytes(requestHeader(404,reportGenerator.getFileType(path)));
 
         }
     }
@@ -34,7 +34,7 @@ public class Response {
         status = status + "Connection: close\r\n";
         status = status + "Server: Step-Unicorn\r\n";
 
-        status = reportGenerator.contentType(5, status);
+        status = reportGenerator.contentType(fileType, status);
         return status;
     }
 }
