@@ -17,22 +17,19 @@ public class DynamicResponse {
         out.flush();
         BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
         respondToClient( in,dataOutputStream);
-//        socket.close();
-//        out.close();
+        socket.close();
+        out.close();
 
     }
 
     private void respondToClient(BufferedReader in,DataOutputStream dataOutputStream) throws IOException {
         String fromServer;
+
         while ((fromServer = in.readLine()) != null) {
-//            dataOutputStream.writeChars("aaa");
-            System.out.println(fromServer);
+            dataOutputStream.writeBytes(fromServer+"\n");
         }
-        dataOutputStream.writeBytes(fromServer);
         dataOutputStream.flush();
-//        dataOutputStream.close();
-//
-//        System.out.println("done for the day");
-//        in.close();
+        dataOutputStream.close();
+        in.close();
     }
 }
