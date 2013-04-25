@@ -8,7 +8,7 @@ import java.io.InputStreamReader;
 import java.net.ServerSocket;
 import java.net.Socket;
 
-public class Server extends Thread{
+public class Server extends Thread {
     private int port;
     private Socket connectedSocket;
     ServerSocket serverSocket;
@@ -18,25 +18,25 @@ public class Server extends Thread{
     }
 
     public void run() {
-        Response response=new Response();
+        Response response = new Response();
         try {
-            serverSocket= new ServerSocket(port);
+            serverSocket = new ServerSocket(port);
         } catch (IOException e) {
         }
         while (true) {
             try {
                 connectedSocket = createSocket();
-                Client client= getClient(connectedSocket);
+                Client client = getClient(connectedSocket);
                 sleep(472);
                 DataOutputStream output = new DataOutputStream(connectedSocket.getOutputStream());
-                response.sendResponse(output, client,this);
+                response.sendResponse(output, client, this);
                 output.close();
-            }
-
-            catch (Exception e) {
+            } catch (Exception e) {
             }
         }
     }
+
+
     public Socket createSocket() throws IOException {
         return serverSocket.accept();
     }
@@ -45,7 +45,7 @@ public class Server extends Thread{
         return new Client((new BufferedReader(new InputStreamReader(connectedSocket.getInputStream()))).readLine());
     }
 
-    public Socket getClientSocket(){
+    public Socket getClientSocket() {
         return connectedSocket;
     }
 }

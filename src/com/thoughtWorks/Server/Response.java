@@ -27,8 +27,13 @@ public class Response {
         }
     }
 
-    private String requestHeader(int return_code, int file_type) {
-        String status = reportGenerator.statusCode(return_code);
+    private String requestHeader(int returnCode, int fileType) {
+        String status;
+        status = reportGenerator.statusCode(returnCode);
+        status = status + "\r\n";
+        status = status + "Connection: close\r\n";
+        status = status + "Server: Step-Unicorn\r\n";
+
         status = reportGenerator.contentType(5, status);
         return status;
     }

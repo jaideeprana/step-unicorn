@@ -112,52 +112,52 @@ public class ReportGenerator {
     }
 
     public String statusCode(int return_code) {
-        String s = "HTTP/1.0 ";
+        String status = "HTTP/1.0 ";
         switch (return_code) {
             case 200:
-                s = s + "200 OK";
+                status = status + "200 OK";
                 break;
             case 400:
-                s = s + "400 Bad Request";
+                status = status + "400 Bad Request";
                 break;
             case 403:
-                s = s + "403 Forbidden";
+                status = status + "403 Forbidden";
                 break;
             case 404:
-                s = s + "404 Not Found";
+                status = status + "404 Not Found";
                 break;
             case 500:
-                s = s + "500 Internal Server Error";
+                status = status + "500 Internal Server Error";
                 break;
             case 501:
-                s = s + "501 Not Implemented";
+                status = status + "501 Not Implemented";
                 break;
         }
-        return s;
+        return status;
     }
 
-    public String contentType(int file_type, String s) {
+    public String contentType(int file_type, String contentType) {
         switch (file_type) {
             case 0:
                 break;
             case 1:
-                s = s + "Content-Type: image/jpeg\r\n";
+                contentType = contentType + "Content-Type: image/jpeg\r\n";
                 break;
             case 2:
-                s = s + "Content-Type: image/gif\r\n";
+                contentType = contentType + "Content-Type: image/gif\r\n";
                 break;
             case 3:
-                s = s + "Content-Type: application/x-zip-compressed\r\n";
+                contentType = contentType + "Content-Type: application/x-zip-compressed\r\n";
                 break;
             case 4:
-                s = s + "Content-Type: image/x-icon\r\n";
+                contentType = contentType + "Content-Type: image/x-icon\r\n";
                 break;
             default:
-                s = s + "Content-Type: text/html\r\n";
+                contentType = contentType + "Content-Type: text/html\r\n";
                 break;
         }
 
-        s = s + "\r\n";
-        return s;
+        contentType = contentType + "\r\n";
+        return contentType;
     }
 }
