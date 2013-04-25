@@ -23,8 +23,6 @@ public class DynamicResponse {
         BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
         respondToClient( in,dataOutputStream);
         socket.close();
-//        out.close();
-
     }
 
     protected void respondToClient(BufferedReader in,DataOutputStream dataOutputStream) throws IOException {
