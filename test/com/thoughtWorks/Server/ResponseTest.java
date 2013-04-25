@@ -26,7 +26,6 @@ public class ResponseTest {
     private ServerSocket serverSocket;
     private Client client;
     private Socket socket;
-    BufferedReader input;
     DataOutputStream output;
 
     @Before
@@ -38,7 +37,6 @@ public class ResponseTest {
 
         when(client.getClient()).thenReturn("GET /src/spike/index.html HTTP/1.1");
 
-        input = new BufferedReader(new InputStreamReader(socket.getInputStream()));
         output = new DataOutputStream(socket.getOutputStream());
     }
 
@@ -50,7 +48,7 @@ public class ResponseTest {
     @Test
     public void shouldReadFromFile() throws IOException, ParserConfigurationException, SAXException {
         Response response = new Response();
-        response.sendResponse(input, output, client);
+        response.sendResponse( output, client);
         when(mockReportGenerator.getPath(client)).thenReturn("static/index.html");
         assertThat(mockReportGenerator.getPath(client), IsEqual.equalTo("static/index.html"));
         verify(mockReportGenerator).getPath(client);
@@ -60,7 +58,7 @@ public class ResponseTest {
     public void shouldGenerateReportForTheGivenRequest() throws IOException, ParserConfigurationException, SAXException {
         Response response = new Response();
         when(mockReportGenerator.getPath(client)).thenReturn("static/index.html");
-        response.sendResponse(input, output, client);
+        response.sendResponse( output, client);
         assertThat(mockReportGenerator.getPath(client), IsEqual.equalTo("static/index.html"));
         verify(mockReportGenerator).generate(mockReportGenerator.getPath(client), output);
     }
@@ -69,7 +67,7 @@ public class ResponseTest {
     public void shouldAddHeaderInTheResponse() throws IOException, ParserConfigurationException, SAXException {
         Response response = new Response();
         when(mockReportGenerator.contentType(anyInt(), anyString())).thenReturn("Content-Type: text/html");
-        response.sendResponse(input, output, client);
+        response.sendResponse( output, client);
         assertThat(mockReportGenerator.contentType(5, "index.html"), IsEqual.equalTo("Content-Type: text/html"));
         verify(mockReportGenerator).contentType(5, "index.html");
     }
@@ -78,7 +76,7 @@ public class ResponseTest {
     public void shouldAddStatusOfRequestToHeader() throws IOException, ParserConfigurationException, SAXException {
         Response response = new Response();
         when(mockReportGenerator.statusCode(anyInt())).thenReturn("200 OK");
-        response.sendResponse(input, output, client);
+        response.sendResponse( output, client);
         assertThat(mockReportGenerator.statusCode(5), IsEqual.equalTo("200 OK"));
         verify(mockReportGenerator).statusCode(5);
     }

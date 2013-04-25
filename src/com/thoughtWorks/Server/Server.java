@@ -21,12 +21,12 @@ public class Server extends Thread{
             try {
                 Socket connectedSocket=createSocket();
                 Client client= getClient(connectedSocket);
-                BufferedReader input = new BufferedReader(new InputStreamReader(connectedSocket.getInputStream()));
-                sleep(500);
+                sleep(472);
                 DataOutputStream output = new DataOutputStream(connectedSocket.getOutputStream());
-                response.sendResponse(input,output,client);
+                response.sendResponse(output, client);
                 output.close();
             }
+
             catch (Exception e) {
             }
         }

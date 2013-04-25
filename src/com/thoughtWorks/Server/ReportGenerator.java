@@ -36,7 +36,7 @@ public class ReportGenerator {
         String content = getContent(client);
         NodeList server = readConfigFile();
 
-        if(client.getClient().contains("static")){
+        if(client.getClient().contains("static") || client.getClient().contains("favicon.icon")){
             for (int temp = 0; temp < server.getLength(); temp++) {
                 Node nNode = server.item(temp);
                 if (nNode.getNodeType() == Node.ELEMENT_NODE) {
