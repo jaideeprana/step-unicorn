@@ -10,12 +10,12 @@ public class Response {
     private DataInputStream dataInputStream;
     private ReportGenerator reportGenerator=new ReportGenerator();
 
-    public void sendResponse( DataOutputStream output,Client client) throws IOException, ParserConfigurationException, SAXException {
-        write(output,client);
+    public void sendResponse( DataOutputStream output,Client client,Server server) throws IOException, ParserConfigurationException, SAXException {
+        write(output,client,server);
     }
 
-    private void write( DataOutputStream output,Client client) throws IOException, ParserConfigurationException, SAXException {
-        String path = reportGenerator.getPath(client);
+    private void write( DataOutputStream output,Client client,Server server) throws IOException, ParserConfigurationException, SAXException {
+        String path = reportGenerator.getPath(client,server);
         try {
             output.writeBytes(requestHeader(200, 5));
             reportGenerator.generate(path, output);
@@ -23,7 +23,7 @@ public class Response {
         }
         catch (Exception e) {
             output.writeBytes(requestHeader(404, 5));
-            output.close();
+
         }
     }
 

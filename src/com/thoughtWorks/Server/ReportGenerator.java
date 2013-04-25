@@ -9,10 +9,10 @@ import org.xml.sax.SAXException;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
-import java.io.DataOutputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
+import java.io.*;
+import java.net.InetAddress;
+import java.net.Socket;
+import java.net.UnknownHostException;
 
 public class ReportGenerator {
 
@@ -31,11 +31,52 @@ public class ReportGenerator {
         requestedFile.close();
     }
 
-    public String getPath(Client client) throws ParserConfigurationException, IOException, SAXException {
+    private void generateForDynamic(Server clientSocket) throws IOException {
+        Socket socket = null;
+        PrintWriter out = null;
+        BufferedReader in = null;
+
+        String ipAddress="10.10.5.126";
+        String portInString="8080";
+        String resources="/forum/login";
+        int port= Integer.parseInt(portInString);
+        String request="GET HTTP://" + ipAddress + ":" + portInString + resources  +"HTTP/1.1";
+
+        try {
+            socket = new Socket(InetAddress.getByName("10.10.5.126"), 8080);
+            out = new PrintWriter(socket.getOutputStream());
+            out.println("GET HTTP://10.10.5.126:8080/forum/login  HTTP/1.1");
+            out.println("");
+            out.println("");
+            out.flush();
+            in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+
+        } catch (UnknownHostException e) {
+            System.err.println("Don't know about host: 10.10.5.126.");
+            System.exit(1);
+        } catch (IOException e) {
+            System.err.println("Couldn't get I/O for the connection to: 10.10.5.126.");
+            System.exit(1);
+        }
+        String fromServer;
+        DataOutputStream dataOutputStream =new DataOutputStream (clientSocket.getClientSocket().getOutputStream());
+
+        while ((fromServer = in.readLine()) != null) {
+            dataOutputStream.writeChars(fromServer);
+            System.out.println(fromServer);
+        }
+        dataOutputStream.writeChars("");
+        dataOutputStream.writeChars("");
+
+        socket.close();
+        out.close();
+        in.close();
+    }
+
+    public String getPath(Client client,Server clientServer) throws ParserConfigurationException, IOException, SAXException {
         String path=null;
         String content = getContent(client);
         NodeList server = readConfigFile();
-
         if(client.getClient().contains("static") || client.getClient().contains("favicon.icon")){
             for (int temp = 0; temp < server.getLength(); temp++) {
                 Node nNode = server.item(temp);
@@ -47,7 +88,7 @@ public class ReportGenerator {
         }
 
         else{
-            System.out.println("dynamic");
+            generateForDynamic(clientServer);
         }
        return path;
     }

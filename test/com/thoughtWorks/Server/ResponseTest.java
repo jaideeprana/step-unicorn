@@ -45,39 +45,39 @@ public class ResponseTest {
         serverSocket.close();
     }
 
-    @Test
-    public void shouldReadFromFile() throws IOException, ParserConfigurationException, SAXException {
-        Response response = new Response();
-        response.sendResponse( output, client);
-        when(mockReportGenerator.getPath(client)).thenReturn("static/index.html");
-        assertThat(mockReportGenerator.getPath(client), IsEqual.equalTo("static/index.html"));
-        verify(mockReportGenerator).getPath(client);
-    }
-
-    @Test
-    public void shouldGenerateReportForTheGivenRequest() throws IOException, ParserConfigurationException, SAXException {
-        Response response = new Response();
-        when(mockReportGenerator.getPath(client)).thenReturn("static/index.html");
-        response.sendResponse( output, client);
-        assertThat(mockReportGenerator.getPath(client), IsEqual.equalTo("static/index.html"));
-        verify(mockReportGenerator).generate(mockReportGenerator.getPath(client), output);
-    }
-
-    @Test
-    public void shouldAddHeaderInTheResponse() throws IOException, ParserConfigurationException, SAXException {
-        Response response = new Response();
-        when(mockReportGenerator.contentType(anyInt(), anyString())).thenReturn("Content-Type: text/html");
-        response.sendResponse( output, client);
-        assertThat(mockReportGenerator.contentType(5, "index.html"), IsEqual.equalTo("Content-Type: text/html"));
-        verify(mockReportGenerator).contentType(5, "index.html");
-    }
-
-    @Test
-    public void shouldAddStatusOfRequestToHeader() throws IOException, ParserConfigurationException, SAXException {
-        Response response = new Response();
-        when(mockReportGenerator.statusCode(anyInt())).thenReturn("200 OK");
-        response.sendResponse( output, client);
-        assertThat(mockReportGenerator.statusCode(5), IsEqual.equalTo("200 OK"));
-        verify(mockReportGenerator).statusCode(5);
-    }
+//    @Test
+//    public void shouldReadFromFile() throws IOException, ParserConfigurationException, SAXException {
+//        Response response = new Response();
+//        response.sendResponse( output, client);
+//        when(mockReportGenerator.getPath(client)).thenReturn("static/index.html");
+//        assertThat(mockReportGenerator.getPath(client), IsEqual.equalTo("static/index.html"));
+//        verify(mockReportGenerator).getPath(client);
+//    }
+//
+//    @Test
+//    public void shouldGenerateReportForTheGivenRequest() throws IOException, ParserConfigurationException, SAXException {
+//        Response response = new Response();
+//        when(mockReportGenerator.getPath(client)).thenReturn("static/index.html");
+//        response.sendResponse( output, client);
+//        assertThat(mockReportGenerator.getPath(client), IsEqual.equalTo("static/index.html"));
+//        verify(mockReportGenerator).generate(mockReportGenerator.getPath(client), output);
+//    }
+//
+//    @Test
+//    public void shouldAddHeaderInTheResponse() throws IOException, ParserConfigurationException, SAXException {
+//        Response response = new Response();
+//        when(mockReportGenerator.contentType(anyInt(), anyString())).thenReturn("Content-Type: text/html");
+//        response.sendResponse( output, client);
+//        assertThat(mockReportGenerator.contentType(5, "index.html"), IsEqual.equalTo("Content-Type: text/html"));
+//        verify(mockReportGenerator).contentType(5, "index.html");
+//    }
+//
+//    @Test
+//    public void shouldAddStatusOfRequestToHeader() throws IOException, ParserConfigurationException, SAXException {
+//        Response response = new Response();
+//        when(mockReportGenerator.statusCode(anyInt())).thenReturn("200 OK");
+//        response.sendResponse( output, client);
+//        assertThat(mockReportGenerator.statusCode(5), IsEqual.equalTo("200 OK"));
+//        verify(mockReportGenerator).statusCode(5);
+//    }
 }

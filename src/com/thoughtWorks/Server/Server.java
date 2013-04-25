@@ -10,6 +10,7 @@ import java.net.Socket;
 
 public class Server extends Thread{
     private int port;
+    private Socket connectedSocket;
 
     public Server(int port) {
         this.port = port;
@@ -19,11 +20,11 @@ public class Server extends Thread{
         Response response=new Response();
         while (true) {
             try {
-                Socket connectedSocket=createSocket();
+                connectedSocket = createSocket();
                 Client client= getClient(connectedSocket);
                 sleep(472);
                 DataOutputStream output = new DataOutputStream(connectedSocket.getOutputStream());
-                response.sendResponse(output, client);
+                response.sendResponse(output, client,this);
                 output.close();
             }
 
@@ -38,5 +39,9 @@ public class Server extends Thread{
 
     public Client getClient(Socket connectedSocket) throws IOException {
         return new Client((new BufferedReader(new InputStreamReader(connectedSocket.getInputStream()))).readLine());
+    }
+
+    public Socket getClientSocket(){
+        return connectedSocket;
     }
 }

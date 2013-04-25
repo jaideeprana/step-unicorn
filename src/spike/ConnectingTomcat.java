@@ -14,7 +14,6 @@ public class ConnectingTomcat {
         PrintWriter out = null;
         BufferedReader in = null;
 
-
         try {
             socket = new Socket(InetAddress.getByName("10.10.5.126"), 8080);
             out = new PrintWriter(socket.getOutputStream());
@@ -34,8 +33,7 @@ public class ConnectingTomcat {
         String fromServer;
 
         while ((fromServer = in.readLine()) != null) {
-            System.out.println("Server: " + fromServer);
-
+            System.out.println(fromServer);
         }
         socket.close();
         out.close();
