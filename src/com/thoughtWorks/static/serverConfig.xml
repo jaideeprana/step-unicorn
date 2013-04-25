@@ -7,8 +7,11 @@
             <static-file-pattern>*.js, *.jpeg, *.gif, *.jpg, *.css</static-file-pattern>
         </server>
         <dynamic-proxy-pass>
-            <url-pattern>/forum</url-pattern>
-            <upstream-url>http://qaserver.com:8080</upstream-url>
+            <url>http://
+                <ipAddress>10.10.5.126</ipAddress>
+                <port>8080</port>
+                <middle>/forum</middle>
+            </url>
         </dynamic-proxy-pass>
     </http>
 </server-config>
