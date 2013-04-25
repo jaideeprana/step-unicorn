@@ -22,10 +22,10 @@ public class Server extends Thread{
                 Socket connectedSocket=createSocket();
                 Client client= getClient(connectedSocket);
                 BufferedReader input = new BufferedReader(new InputStreamReader(connectedSocket.getInputStream()));
+                sleep(100);
                 DataOutputStream output = new DataOutputStream(connectedSocket.getOutputStream());
                 response.sendResponse(input,output,client);
                 output.close();
-                sleep(500);
             }
             catch (Exception e) {
             }

@@ -49,7 +49,6 @@ public class ReportGenerator {
         else{
             System.out.println("dynamic");
         }
-
        return path;
     }
 
