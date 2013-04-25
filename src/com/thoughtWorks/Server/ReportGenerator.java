@@ -41,7 +41,6 @@ public class ReportGenerator {
         BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 
         respondToClient(clientSocket, in);
-
         socket.close();
         out.close();
     }
@@ -49,13 +48,12 @@ public class ReportGenerator {
     private void respondToClient(Server clientSocket, BufferedReader in) throws IOException {
         String fromServer;
         DataOutputStream dataOutputStream = new DataOutputStream(clientSocket.getClientSocket().getOutputStream());
-
         while ((fromServer = in.readLine()) != null) {
             dataOutputStream.writeChars(fromServer);
-            System.out.println(fromServer);
         }
-        dataOutputStream.writeChars("");
-        dataOutputStream.writeChars("");
+        dataOutputStream.flush();
+        dataOutputStream.close();
+        System.out.println("done for the day");
         in.close();
     }
 
