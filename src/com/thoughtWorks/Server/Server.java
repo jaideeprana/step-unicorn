@@ -29,7 +29,8 @@ public class Server extends Thread {
                 Client client = getClient(connectedSocket);
                 sleep(472);
                 DataOutputStream output = new DataOutputStream(connectedSocket.getOutputStream());
-                response.sendResponse(output, client, this);
+                response.sendResponse(output, client);
+                output.flush();
                 output.close();
             } catch (Exception e) {
             }

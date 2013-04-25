@@ -10,11 +10,9 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import java.io.*;
-import java.net.InetAddress;
-import java.net.Socket;
 
 public class ReportGenerator {
-
+    DynamicResponse dynamicResponse=new DynamicResponse();
     public void generate(String path, DataOutputStream output) throws IOException {
 
         FileInputStream requestedFile = new FileInputStream(path);
@@ -27,37 +25,13 @@ public class ReportGenerator {
             }
             output.write(buffer, 0, b);
         }
+        output.flush();
+        output.close();
         requestedFile.close();
     }
 
-    private void generateForDynamic(Server clientSocket) throws IOException {
-        String ipAddress = "10.10.5.126", portInString = "8080", resources = "/forum/login";
-        int port = Integer.parseInt(portInString);
-        String request = "GET HTTP://" + ipAddress + ":" + portInString + resources + "  HTTP/1.1" + "\n" + "" + "\n" + "";
-        Socket socket = new Socket(InetAddress.getByName(ipAddress), port);
-        PrintWriter  out = new PrintWriter(socket.getOutputStream());
-        out.println(request);
-        out.flush();
-        BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 
-        respondToClient(clientSocket, in);
-        socket.close();
-        out.close();
-    }
-
-    private void respondToClient(Server clientSocket, BufferedReader in) throws IOException {
-        String fromServer;
-        DataOutputStream dataOutputStream = new DataOutputStream(clientSocket.getClientSocket().getOutputStream());
-        while ((fromServer = in.readLine()) != null) {
-            dataOutputStream.writeChars(fromServer);
-        }
-        dataOutputStream.flush();
-        dataOutputStream.close();
-        System.out.println("done for the day");
-        in.close();
-    }
-
-    public String getPath(Client client, Server clientServer) throws ParserConfigurationException, IOException, SAXException {
+    public String getPath(Client client,DataOutputStream dataOutputStream) throws ParserConfigurationException, IOException, SAXException {
         String path = null;
         String content = getContent(client);
         NodeList server = readConfigFile();
@@ -70,7 +44,7 @@ public class ReportGenerator {
                 }
             }
         } else {
-            generateForDynamic(clientServer);
+            dynamicResponse.generate(dataOutputStream);
         }
         return path;
     }
