@@ -33,44 +33,23 @@ public class ReportGenerator {
 
     public String getPath(Client client,DataOutputStream dataOutputStream) throws ParserConfigurationException, IOException, SAXException {
         String path = null;
-        String content = getContent(client);
-        boolean isStatic=true;
-
-        NodeList staticServer = readConfigFile("server");
+        String content = getFileName(client);
+        NodeList server = readConfigFile();
         if (client.getClient().contains("static") || client.getClient().contains("favicon.icon")) {
-            path = readFromConfigureFile(path, content, staticServer,"root",isStatic);
-        }
-
-        else {
-            NodeList dynamicServer=readConfigFile("dynamic-proxy-pass");
-            String ipAddress=readFromConfigureFile(path, content, dynamicServer,"ipAddress",!isStatic);
-
-            String port=readFromConfigureFile(path, content, dynamicServer,"port",!isStatic);
-
-            String middle=readFromConfigureFile(path, content, dynamicServer,"middle",!isStatic);
-
-            dynamicResponse.generate(dataOutputStream,ipAddress,port,middle + "/" + content);
-        }
-        return path;
-    }
-
-    private String readFromConfigureFile(String path, String content, NodeList staticServer,String tag,boolean isStatic) {
-        for (int temp = 0; temp < staticServer.getLength(); temp++) {
-            Node nNode = staticServer.item(temp);
-            if (nNode.getNodeType() == Node.ELEMENT_NODE) {
-                Element eElement = (Element) nNode;
-                if(isStatic){
-                path = eElement.getElementsByTagName(tag).item(0).getTextContent() + content;
-                }
-                else{
-                    path = eElement.getElementsByTagName(tag).item(0).getTextContent();
+            for (int temp = 0; temp < server.getLength(); temp++) {
+                Node nNode = server.item(temp);
+                if (nNode.getNodeType() == Node.ELEMENT_NODE) {
+                    Element eElement = (Element) nNode;
+                    path = eElement.getElementsByTagName("root").item(0).getTextContent() + content;
                 }
             }
+        } else {
+            dynamicResponse.generate(dataOutputStream);
         }
         return path;
     }
 
-    private String getContent(Client client) {
+    protected String getFileName(Client client) {
         String clientUrl = client.getClient() + "/";
         String staticUrl = "GET /src/com/static/";
         clientUrl = clientUrl.substring(0, staticUrl.length() + 10);
@@ -79,12 +58,12 @@ public class ReportGenerator {
         return contentParts[0];
     }
 
-    private NodeList readConfigFile(String tag) throws ParserConfigurationException, SAXException, IOException {
+    private NodeList readConfigFile() throws ParserConfigurationException, SAXException, IOException {
         File fXmlFile = new File("./src/com/thoughtWorks/static/serverConfig.xml");
         DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
         DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
         Document doc = dBuilder.parse(fXmlFile);
         doc.getDocumentElement().normalize();
-        return doc.getElementsByTagName(tag);
+        return doc.getElementsByTagName("server");
     }
 }

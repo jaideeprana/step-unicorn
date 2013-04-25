@@ -3,7 +3,7 @@
     <http>
         <server>
             <listen>80</listen>
-            <root>/home/bipilesh/project/step-unicorn/src/com/thoughtWorks/static/</root>
+            <root>/home/sandeepk/miniproject/step-unicorn/src/com/thoughtWorks/static/</root>
             <static-file-pattern>*.js, *.jpeg, *.gif, *.jpg, *.css</static-file-pattern>
         </server>
         <dynamic-proxy-pass>
@@ -15,3 +15,4 @@
         </dynamic-proxy-pass>
     </http>
 </server-config>
+

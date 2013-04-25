@@ -27,7 +27,6 @@ public class Server extends Thread {
             try {
                 connectedSocket = createSocket();
                 Client client = getClient(connectedSocket);
-                sleep(472);
                 DataOutputStream output = new DataOutputStream(connectedSocket.getOutputStream());
                 response.sendResponse(output, client);
                 output.flush();
