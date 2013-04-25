@@ -24,7 +24,6 @@ public class Server extends Thread{
                 BufferedReader input = new BufferedReader(new InputStreamReader(connectedSocket.getInputStream()));
                 DataOutputStream output = new DataOutputStream(connectedSocket.getOutputStream());
                 response.sendResponse(input,output,client);
-                output.close();
                 sleep(500);
             }
             catch (Exception e) {

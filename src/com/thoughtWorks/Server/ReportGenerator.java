@@ -18,17 +18,17 @@ public class ReportGenerator {
 
     public void generate(String path, DataOutputStream output) throws IOException {
 
-        FileInputStream requestedFile = new FileInputStream(path);
+        FileInputStream requestedfile = new FileInputStream(path);
 
         byte [] buffer = new byte[1024];
         while (true) {
-            int b = requestedFile.read(buffer, 0,1024);
+            int b = requestedfile.read(buffer, 0,1024);
             if (b == -1) {
                 break;
             }
             output.write(buffer,0,b);
         }
-        requestedFile.close();
+        requestedfile.close();
     }
 
     public String getPath(Client client) throws ParserConfigurationException, IOException, SAXException {
@@ -63,7 +63,7 @@ public class ReportGenerator {
     }
 
     private NodeList readConfigFile() throws ParserConfigurationException, SAXException, IOException {
-        File fXmlFile = new File("./src/com/thoughtWorks/static/serverConfig.xml");
+        File fXmlFile = new File("/home/bipilesh/project/step-unicorn/src/com/thoughtWorks/static/serverConfig.xml");
         DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
         DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
         Document doc = dBuilder.parse(fXmlFile);
