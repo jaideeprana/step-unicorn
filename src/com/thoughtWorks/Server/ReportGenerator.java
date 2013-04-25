@@ -20,46 +20,36 @@ public class ReportGenerator {
 
         FileInputStream requestedFile = new FileInputStream(path);
 
-        byte [] buffer = new byte[1024];
+        byte[] buffer = new byte[1024];
         while (true) {
-            int b = requestedFile.read(buffer, 0,1024);
+            int b = requestedFile.read(buffer, 0, 1024);
             if (b == -1) {
                 break;
             }
-            output.write(buffer,0,b);
+            output.write(buffer, 0, b);
         }
         requestedFile.close();
     }
 
     private void generateForDynamic(Server clientSocket) throws IOException {
-        Socket socket = null;
-        PrintWriter out = null;
-        BufferedReader in = null;
+        String ipAddress = "10.10.5.126", portInString = "8080", resources = "/forum/login";
+        int port = Integer.parseInt(portInString);
+        String request = "GET HTTP://" + ipAddress + ":" + portInString + resources + "  HTTP/1.1" + "\n" + "" + "\n" + "";
+        Socket socket = new Socket(InetAddress.getByName(ipAddress), port);
+        PrintWriter  out = new PrintWriter(socket.getOutputStream());
+        out.println(request);
+        out.flush();
+        BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 
-        String ipAddress="10.10.5.126";
-        String portInString="8080";
-        String resources="/forum/login";
-        int port= Integer.parseInt(portInString);
-        String request="GET HTTP://" + ipAddress + ":" + portInString + resources  +"HTTP/1.1";
+        respondToClient(clientSocket, in);
 
-        try {
-            socket = new Socket(InetAddress.getByName("10.10.5.126"), 8080);
-            out = new PrintWriter(socket.getOutputStream());
-            out.println("GET HTTP://10.10.5.126:8080/forum/login  HTTP/1.1");
-            out.println("");
-            out.println("");
-            out.flush();
-            in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+        socket.close();
+        out.close();
+    }
 
-        } catch (UnknownHostException e) {
-            System.err.println("Don't know about host: 10.10.5.126.");
-            System.exit(1);
-        } catch (IOException e) {
-            System.err.println("Couldn't get I/O for the connection to: 10.10.5.126.");
-            System.exit(1);
-        }
+    private void respondToClient(Server clientSocket, BufferedReader in) throws IOException {
         String fromServer;
-        DataOutputStream dataOutputStream =new DataOutputStream (clientSocket.getClientSocket().getOutputStream());
+        DataOutputStream dataOutputStream = new DataOutputStream(clientSocket.getClientSocket().getOutputStream());
 
         while ((fromServer = in.readLine()) != null) {
             dataOutputStream.writeChars(fromServer);
@@ -67,38 +57,33 @@ public class ReportGenerator {
         }
         dataOutputStream.writeChars("");
         dataOutputStream.writeChars("");
-
-        socket.close();
-        out.close();
         in.close();
     }
 
-    public String getPath(Client client,Server clientServer) throws ParserConfigurationException, IOException, SAXException {
-        String path=null;
+    public String getPath(Client client, Server clientServer) throws ParserConfigurationException, IOException, SAXException {
+        String path = null;
         String content = getContent(client);
         NodeList server = readConfigFile();
-        if(client.getClient().contains("static") || client.getClient().contains("favicon.icon")){
+        if (client.getClient().contains("static") || client.getClient().contains("favicon.icon")) {
             for (int temp = 0; temp < server.getLength(); temp++) {
                 Node nNode = server.item(temp);
                 if (nNode.getNodeType() == Node.ELEMENT_NODE) {
                     Element eElement = (Element) nNode;
-                    path = eElement.getElementsByTagName("root").item(0).getTextContent()+content;
+                    path = eElement.getElementsByTagName("root").item(0).getTextContent() + content;
                 }
             }
-        }
-
-        else{
+        } else {
             generateForDynamic(clientServer);
         }
-       return path;
+        return path;
     }
 
     private String getContent(Client client) {
-        String clientUrl = client.getClient() +"/";
+        String clientUrl = client.getClient() + "/";
         String staticUrl = "GET /src/com/static/";
-        clientUrl = clientUrl.substring(0, staticUrl.length()+10);
+        clientUrl = clientUrl.substring(0, staticUrl.length() + 10);
         String clientUrlParts[] = clientUrl.split("/");
-        String contentParts[]=clientUrlParts[4].split(" ");
+        String contentParts[] = clientUrlParts[4].split(" ");
         return contentParts[0];
     }
 
