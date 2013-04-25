@@ -94,11 +94,4 @@ public class ReportGenerator {
         doc.getDocumentElement().normalize();
         return doc.getElementsByTagName("server");
     }
-
-
-
-
-
-
-
 }
