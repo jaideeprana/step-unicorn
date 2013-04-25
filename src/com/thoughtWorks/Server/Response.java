@@ -1,8 +1,12 @@
 package com.thoughtWorks.Server;
 
 import org.xml.sax.SAXException;
+
 import javax.xml.parsers.ParserConfigurationException;
-import java.io.*;
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.IOException;
+import java.util.Date;
 
 public class Response {
     private Request request=new Request();
@@ -34,6 +38,7 @@ public class Response {
         status = status + "\r\n";
         status = status + "Connection: close\r\n";
         status = status + "Server: Step-Unicorn\r\n";
+        status = status + "Date: "+new Date()+"\r\n";
 
         status = header.contentType(fileType, status);
         return status;
