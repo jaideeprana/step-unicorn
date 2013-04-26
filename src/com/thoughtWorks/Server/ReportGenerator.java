@@ -23,6 +23,7 @@ public class ReportGenerator {
             if (b == -1) {
                 break;
             }
+            System.out.println(b);
             output.write(buffer, 0, b);
         }
         output.flush();
